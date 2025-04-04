@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+package beget.vpsImageManager.v1.image;
+
+import "google/api/annotations.proto";
+
+service ManageService {
+    rpc createImage (CreateImageRequest) returns (CreateImageResponse) {
+        option (google.api.http) = {
+            post: "/v1/image"
+            body: "*"
+        };
+    }
+
+    rpc calculatePrice (CalculatePriceRequest) returns (CalculatePriceResponse) {
+        option (google.api.http) = {
+            get: "/v1/image/calculation"
+        };
+
+    }
+
+    rpc getDownloadLink (GetDownloadLinkRequest) returns (GetDownloadLinkResponse) {
+        option (google.api.http) = {
+            get: "/v1/image/{id}/link"
+        };
+    }
+
+    rpc listImages (ListImagesRequest) returns (ListImagesResponse) {
+        option (google.api.http) = {
+            get: "/v1/image"
+        };
+    }
+
+    rpc updateImage (UpdateImageRequest) returns (UpdateImageResponse) {
+        option (google.api.http) = {
+            put: "/v1/image/{id}"
+            body: "*"
+        };
+    }
+
+    rpc listRegions (ListRegionsRequest) returns (ListRegionsResponse) {
+        option (google.api.http) = {
+            get: "/v1/image/region"
+        };
+    }
+
+    rpc deleteImage (DeleteImageRequest) returns (DeleteImageResponse) {
+        option (google.api.http) = {
+            delete: "/v1/image/{id}"
+        };
+    }
+}
+
+message CreateImageRequest {
+    ImageSource source = 1;
+    string name = 2;
+    string region = 3;
+}
+
+message CreateImageResponse {
+    Image image = 1;
+}
+
+message CalculatePriceRequest {
+    oneof source {
+        int64 file_size = 1;
+        string link = 2;
+        string vps_uuid = 3;
+    }
+}
+
+message CalculatePriceResponse {
+    oneof result {
+        PriceCalculationInfo price_calculation_info = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            _ = 0;
+            IMPOSSIBLE_TO_CALCULATE = 1;
+        }
+    }
+}
+
+message PriceCalculationInfo {
+    double price = 1;
+}
+
+message GetDownloadLinkRequest {
+    string id = 1;
+}
+
+message GetDownloadLinkResponse {
+    string link = 1;
+    string expired_at = 2;
+}
+
+message ListImagesRequest {
+    int32 page = 1;
+    int32 page_size = 2;
+    OrderBy order_by = 3;
+    repeated SearchScope search_scope = 4;
+
+    message SearchScope {
+        oneof condition {
+            ByRegion by_region = 1;
+        }
+
+        message ByRegion {
+            repeated string region = 1;
+        }
+    }
+}
+
+message ListImagesResponse {
+    repeated Image images = 1;
+    int32 page = 2;
+    int32 page_size = 3;
+    int32 total = 4;
+}
+
+message UpdateImageResponse {
+    Image image = 1;
+}
+
+message UpdateImageRequest {
+    string id = 1;
+    string name = 2;
+    string region = 3;
+}
+
+message ListRegionsRequest {}
+
+message ListRegionsResponse {
+    repeated string region = 1;
+}
+
+message DeleteImageRequest {
+    string id = 1;
+}
+
+message DeleteImageResponse {}
+
+message Image {
+    string id = 1;
+    string name = 2;
+    string region = 3;
+    ImageStatus status = 4;
+    string created_at = 5;
+}
+
+enum ImageStatus {
+    IMAGE_STATUS_CREATED = 0;
+    IMAGE_STATUS_CREATING = 1;
+    IMAGE_STATUS_ERROR = 2;
+}
+
+message ImageSource {
+    oneof data {
+        FileSource file = 1;
+        LinkSource link = 2;
+        VpsSource vps = 3;
+    }
+
+    message VpsSource {
+        string id = 1;
+        bool stop = 2;
+    }
+
+    message LinkSource {
+        string link = 1;
+    }
+
+    message FileSource {
+        string file_link = 1;
+    }
+}
+
+
+enum OrderBy {
+    ORDER_BY_CREATED_AT_ASC = 0;
+    ORDER_BY_CREATED_AT_DESC = 1;
+    ORDER_BY_SIZE_ASC = 2;
+    ORDER_BY_SIZE_DESC = 3;
+    ORDER_BY_PRICE_ASC = 4;
+    ORDER_BY_PRICE_DESC = 5;
+}
