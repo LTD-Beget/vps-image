@@ -154,6 +154,8 @@ message Image {
     string region = 3;
     ImageStatus status = 4;
     string created_at = 5;
+    double price = 6;
+    int64 size_bytes = 7;
 }
 
 enum ImageStatus {
