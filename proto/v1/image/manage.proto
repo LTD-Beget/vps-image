@@ -139,7 +139,7 @@ message UpdateImageRequest {
 message ListRegionsRequest {}
 
 message ListRegionsResponse {
-    repeated string region = 1;
+    repeated Region region = 1;
 }
 
 message DeleteImageRequest {
@@ -147,6 +147,14 @@ message DeleteImageRequest {
 }
 
 message DeleteImageResponse {}
+
+message Region {
+    string id = 1;
+    string name_display = 2;
+    string name_display_en = 3;
+    string country = 4;
+    int64 priority = 5;
+}
 
 message Image {
     string id = 1;
