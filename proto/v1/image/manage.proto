@@ -49,6 +49,12 @@ service ManageService {
             delete: "/v1/image/{id}"
         };
     }
+
+    rpc restoreImage (RestoreImageRequest) returns (RestoreImageResponse) {
+        option (google.api.http) = {
+            post: "/v1/image/{id}/restore"
+        };
+    }
 }
 
 message CreateImageRequest {
@@ -147,6 +153,30 @@ message DeleteImageRequest {
 }
 
 message DeleteImageResponse {}
+
+message RestoreImageRequest {
+    string id = 1;
+    string vps_id = 2;
+}
+
+message RestoreImageResponse {
+    Restore restore = 1;
+}
+
+message Restore {
+    Image image = 1;
+    RestoreStatus restore_status = 2;
+    string vps_id = 3;
+    string vps_name = 4;
+    string date_create = 5;
+    string date_complete = 6;
+}
+
+enum RestoreStatus {
+    RESTORE_STATUS_PENDING = 0;
+    RESTORE_STATUS_PROCESSING = 1;
+    RESTORE_STATUS_COMPLETED = 3;
+}
 
 message Region {
     string id = 1;
