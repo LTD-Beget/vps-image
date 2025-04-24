@@ -204,7 +204,6 @@ enum ImageStatus {
 
 message ImageSource {
     oneof data {
-        FileSource file = 1;
         LinkSource link = 2;
         VpsSource vps = 3;
     }
@@ -216,10 +215,6 @@ message ImageSource {
 
     message LinkSource {
         string link = 1;
-    }
-
-    message FileSource {
-        string file_link = 1;
     }
 }
 
