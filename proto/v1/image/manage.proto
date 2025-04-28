@@ -200,6 +200,8 @@ enum ImageStatus {
     IMAGE_STATUS_CREATED = 0;
     IMAGE_STATUS_CREATING = 1;
     IMAGE_STATUS_ERROR = 2;
+    IMAGE_STATUS_CONVERTING = 3;
+    IMAGE_STATUS_MIGRATING = 4;
 }
 
 message ImageSource {
