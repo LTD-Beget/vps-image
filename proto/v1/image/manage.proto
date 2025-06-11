@@ -104,6 +104,26 @@ message GetDownloadLinkRequest {
 }
 
 message GetDownloadLinkResponse {
+    oneof result {
+        DownloadLinkInfo download_link_info = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            _ = 0;
+            IMAGE_MIGRATING = 1;
+        }
+    }
+}
+
+message DownloadLinkInfo {
     string link = 1;
     string expired_at = 2;
 }
@@ -133,7 +153,23 @@ message ListImagesResponse {
 }
 
 message UpdateImageResponse {
-    Image image = 1;
+    oneof result {
+        Image image = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            _ = 0;
+            IMAGE_MIGRATING = 1;
+        }
+    }
 }
 
 message UpdateImageRequest {
@@ -160,7 +196,22 @@ message RestoreImageRequest {
 }
 
 message RestoreImageResponse {
-    Restore restore = 1;
+    oneof result {
+        Restore restore = 2;
+        Error error = 3;
+    }
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            _ = 0;
+            IMAGE_MIGRATING = 1;
+        }
+    }
 }
 
 message Restore {
