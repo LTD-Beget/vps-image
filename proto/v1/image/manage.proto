@@ -53,6 +53,7 @@ service ManageService {
     rpc restoreImage (RestoreImageRequest) returns (RestoreImageResponse) {
         option (google.api.http) = {
             post: "/v1/image/{id}/restore"
+            body: "*"
         };
     }
 }
