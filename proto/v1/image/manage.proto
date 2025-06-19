@@ -130,10 +130,8 @@ message DownloadLinkInfo {
 }
 
 message ListImagesRequest {
-    int32 page = 1;
-    int32 page_size = 2;
-    OrderBy order_by = 3;
-    repeated SearchScope search_scope = 4;
+    OrderBy order_by = 1;
+    repeated SearchScope search_scope = 2;
 
     message SearchScope {
         oneof condition {
@@ -148,9 +146,6 @@ message ListImagesRequest {
 
 message ListImagesResponse {
     repeated Image images = 1;
-    int32 page = 2;
-    int32 page_size = 3;
-    int32 total = 4;
 }
 
 message UpdateImageResponse {
