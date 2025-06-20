@@ -129,7 +129,7 @@ message DownloadLinkInfo {
     string expired_at = 2;
 }
 
-message ListImagesRequest {z
+message ListImagesRequest {
 }
 
 message ListImagesResponse {
