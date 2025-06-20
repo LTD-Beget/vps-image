@@ -194,6 +194,11 @@ message RestoreImageResponse {
         enum Code {
             _ = 0;
             IMAGE_MIGRATING = 1;
+            CONFIGURATION_NOT_ENOUGH = 2;
+            IMAGE_NOT_READY = 3;
+            REGION_MISMATCH = 4;
+            UNSUITABLE_VPS_STATUS = 5;
+            VALIDATION_ERROR = 6;
         }
     }
 }
