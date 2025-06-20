@@ -129,18 +129,7 @@ message DownloadLinkInfo {
     string expired_at = 2;
 }
 
-message ListImagesRequest {
-    repeated SearchScope search_scope = 1;
-
-    message SearchScope {
-        oneof condition {
-            ByRegion by_region = 1;
-        }
-
-        message ByRegion {
-            repeated string region = 1;
-        }
-    }
+message ListImagesRequest {z
 }
 
 message ListImagesResponse {
