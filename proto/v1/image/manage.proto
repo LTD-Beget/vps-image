@@ -130,8 +130,7 @@ message DownloadLinkInfo {
 }
 
 message ListImagesRequest {
-    OrderBy order_by = 1;
-    repeated SearchScope search_scope = 2;
+    repeated SearchScope search_scope = 1;
 
     message SearchScope {
         oneof condition {
