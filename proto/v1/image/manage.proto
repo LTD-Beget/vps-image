@@ -149,7 +149,9 @@ message GetCalculationResponse {
         string message = 2;
 
         enum Code {
-            _ = 0;
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
             // Невозможно рассчитать стоимость по переданным данным
             IMPOSSIBLE_TO_CALCULATE = 1;
         }
@@ -183,8 +185,8 @@ message GetDownloadLinkResponse {
         string message = 2;
 
         enum Code {
-            // Неизвестная ошибка
-            _ = 0;
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
 
             // Образ в процессе миграции, получение ссылки невозможно
             IMAGE_MIGRATING = 1;
@@ -235,7 +237,9 @@ message UpdateImageResponse {
         string message = 2;
 
         enum Code {
-            _ = 0;
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
             // Образ в процессе миграции, обновление невозможно
             IMAGE_MIGRATING = 1;
         }
@@ -304,8 +308,8 @@ message RestoreImageResponse {
         string message = 2;
 
         enum Code {
-            // Неизвестная ошибка
-            _ = 0;
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
 
             // Образ находится в процессе миграции
             IMAGE_MIGRATING = 1;
