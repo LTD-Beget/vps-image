@@ -115,8 +115,32 @@ message CreateImageRequest {
 }
 
 message CreateImageResponse {
-    // Информация о созданном образе
-    Image image = 1;
+    oneof result {
+        // Информация о созданном образе
+        Image image = 1;
+
+        // Информация об ошибке
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
+            // Регион VPS не совпадает с регионом образа
+            REGION_MISMATCH = 1;
+
+            // VPS не найдена
+            VPS_NOT_FOUND = 2;
+        }
+    }
 }
 
 message GetCalculationRequest {
