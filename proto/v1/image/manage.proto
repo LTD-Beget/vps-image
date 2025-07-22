@@ -141,7 +141,13 @@ message CreateImageResponse {
             VPS_NOT_FOUND = 2;
 
             // VPS находится в архиве
-            CREATE_FROM_ARCHIVED_VPS_FAILED = 3;
+            VPS_ARCHIVED = 3;
+
+            // VPS находится в процессе миграции
+            VPS_MIGRATING = 4;
+
+            // VPS находится в состоянии разблокировки
+            VPS_UNBLOCKING = 5;
         }
     }
 }
