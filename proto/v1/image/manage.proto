@@ -139,6 +139,9 @@ message CreateImageResponse {
 
             // VPS не найдена
             VPS_NOT_FOUND = 2;
+
+            // VPS находится в архиве
+            CREATE_FROM_ARCHIVED_VPS_FAILED = 3;
         }
     }
 }
