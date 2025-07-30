@@ -1,0 +1,482 @@
+syntax = "proto3";
+
+package beget.vpsImageManager.v1.image;
+
+import "google/api/annotations.proto";
+
+// Управление образами облачных серверов
+//
+// Предоставляет набор методов для управления образами облачных серверов
+service ManageService {
+    // Создать образ
+    //
+    // Создает образ с заданными параметрами.
+    //
+    // Для получения доступных регионов `region`
+    // необходимо использовать метод "Получить доступные регионы образов" из API "Образы облачных серверов"
+    rpc createImage(CreateImageRequest) returns (CreateImageResponse) {
+        option (google.api.http) = {
+            post: "/v1/image"
+            body: "*"
+        };
+    }
+
+    // Рассчитать стоимость образа
+    //
+    // Возвращает расчет стоимости хранения образа.
+    //
+    // Для получения доступных идентификаторов VPS `vps_id` необходимо использовать метод
+    // "Получить список VPS" из API "Облачные серверы".
+    rpc getCalculation(GetCalculationRequest) returns (GetCalculationResponse) {
+        option (google.api.http) = {
+            get: "/v1/image/calculation"
+        };
+    }
+
+    // Получить список образов
+    //
+    // Возвращает информацию по всем образам на текущем аккаунте.
+    rpc getList(GetListRequest) returns (GetListResponse) {
+        option (google.api.http) = {
+            get: "/v1/image"
+        };
+    }
+
+    // Получить ссылку на скачивание образа
+    //
+    // Возвращает временную ссылку на скачивание файла образа.
+    //
+    // Для получения доступных идентификаторов образов `id` необходимо использовать метод
+    // "Получить список образов" из API "Образы облачных серверов"
+    rpc getDownloadLink(GetDownloadLinkRequest) returns (GetDownloadLinkResponse) {
+        option (google.api.http) = {
+            get: "/v1/image/{id}/link"
+        };
+    }
+
+    // Обновить образ
+    //
+    // Позволяет изменить отображаемое имя образа и сменить его регион.
+    //
+    // Для получения доступных идентификаторов образов `id` необходимо использовать метод
+    // "Получить список образов" из API "Образы облачных серверов"
+    rpc updateImage (UpdateImageRequest) returns (UpdateImageResponse) {
+        option (google.api.http) = {
+            put: "/v1/image/{id}"
+            body: "*"
+        };
+    }
+
+    // Получить доступные регионы образов
+    //
+    // Возвращает список доступных регионов хранения образов
+    rpc getRegionList(GetRegionListRequest) returns (GetRegionListResponse) {
+        option (google.api.http) = {
+            get: "/v1/image/region"
+        };
+    }
+
+    // Удалить образ
+    //
+    // Удаляет образ облачного сервера.
+    //
+    // Для получения доступных идентификаторов образов `id` необходимо использовать метод
+    // "Получить список образов" из API "Образы облачных серверов"
+    rpc deleteImage(DeleteImageRequest) returns (DeleteImageResponse) {
+        option (google.api.http) = {
+            delete: "/v1/image/{id}"
+        };
+    }
+
+    // Восстановить образ на облачный сервер
+    //
+    // Выполняет восстановление VPS из указанного образа.
+    //
+    // Для получения доступных идентификаторов образов `id` и VPS `vps_id`
+    // необходимо использовать методы "Получить список образов" и "Получить список VPS"
+    // из соответствующих API.
+    rpc restoreImage(RestoreImageRequest) returns (RestoreImageResponse) {
+        option (google.api.http) = {
+            post: "/v1/image/{id}/restore"
+            body: "*"
+        };
+    }
+}
+
+message CreateImageRequest {
+    // Источник данных для создания образа
+    ImageSource source = 1;
+
+    // Имя образа
+    string name = 2;
+
+    // Регион хранения образа
+    string region = 3;
+}
+
+message CreateImageResponse {
+    oneof result {
+        // Информация о созданном образе
+        Image image = 1;
+
+        // Информация об ошибке
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
+            // Регион VPS не совпадает с регионом образа
+            REGION_MISMATCH = 1;
+
+            // VPS не найдена
+            VPS_NOT_FOUND = 2;
+
+            // VPS находится в архиве
+            VPS_ARCHIVED = 3;
+
+            // VPS находится в процессе миграции
+            VPS_MIGRATING = 4;
+
+            // VPS находится в состоянии разблокировки
+            VPS_UNBLOCKING = 5;
+        }
+    }
+}
+
+message GetCalculationRequest {
+    oneof source {
+        // Размер файла в байтах
+        int64 file_size = 1;
+
+        // Ссылка на файл образа
+        string link = 2;
+
+        // Идентификатор VPS, с которого будет создан образ
+        string vps_id = 3;
+    }
+}
+
+message GetCalculationResponse {
+    oneof result {
+        // Информация о расчете стоимости
+        PriceCalculationInfo price_calculation_info = 1;
+
+        // Информация об ошибке
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
+            // Невозможно рассчитать стоимость по переданным данным
+            IMPOSSIBLE_TO_CALCULATE = 1;
+        }
+    }
+}
+
+message PriceCalculationInfo {
+    // Расчетная стоимость хранения образа
+    double price = 1;
+}
+
+message GetDownloadLinkRequest {
+    // Идентификатор образа
+    string id = 1;
+}
+
+message GetDownloadLinkResponse {
+    oneof result {
+        // Информация о ссылке на скачивание
+        DownloadLinkInfo download_link_info = 1;
+
+        // Информация об ошибке
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
+            // Образ в процессе миграции, получение ссылки невозможно
+            IMAGE_MIGRATING = 1;
+        }
+    }
+}
+
+message DownloadLinkInfo {
+    // Временная ссылка на скачивание файла образа
+    string link = 1;
+
+    // Время истечения действия ссылки
+    string expired_at = 2;
+}
+
+message GetListRequest {}
+
+message GetListResponse {
+    // Список всех доступных образов
+    repeated Image images = 1;
+}
+
+message UpdateImageRequest {
+    // Идентификатор образа
+    string id = 1;
+
+    // Новое имя образа
+    string name = 2;
+
+    // Новый регион хранения образа
+    string region = 3;
+}
+
+message UpdateImageResponse {
+    oneof result {
+        // Обновлённый образ
+        Image image = 1;
+
+        // Информация об ошибке
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
+            // Образ в процессе миграции, обновление невозможно
+            IMAGE_MIGRATING = 1;
+        }
+    }
+}
+
+message GetRegionListRequest {}
+
+message GetRegionListResponse {
+    // Список доступных регионов хранения образов
+    repeated Region regions = 1;
+}
+
+message DeleteImageRequest {
+    // Идентификатор образа, который необходимо удалить
+    string id = 1;
+}
+
+message DeleteImageResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: информация о образе
+        Image image = 1;
+
+        // Результат запроса: ошибка при удалении образа
+        Error error = 2;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Описание ошибки
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+        }
+    }
+}
+
+message RestoreImageRequest {
+    // Идентификатор образа
+    string id = 1;
+
+    // Идентификатор VPS, в который нужно восстановить образ
+    string vps_id = 2;
+}
+
+message RestoreImageResponse {
+    // Результат запроса
+    oneof result {
+        // Результат запроса: Информация о процессе восстановления
+        Restore restore = 2;
+
+        // Результат запроса: Информация об ошибке
+        Error error = 3;
+    }
+
+    message Error {
+        // Код ошибки
+        Code code = 1;
+
+        // Сообщение об ошибке
+        string message = 2;
+
+        enum Code {
+            // Внутренняя ошибка
+            INTERNAL_ERROR = 0;
+
+            // Образ находится в процессе миграции
+            IMAGE_MIGRATING = 1;
+
+            // Недостаточно ресурсов конфигурации для восстановления
+            CONFIGURATION_NOT_ENOUGH = 2;
+
+            // Образ ещё не готов к восстановлению
+            IMAGE_NOT_READY = 3;
+
+            // Регион образа и VPS не совпадают
+            REGION_MISMATCH = 4;
+
+            // Неподходящий статус VPS для восстановления
+            UNSUITABLE_VPS_STATUS = 5;
+
+            // Ошибка валидации входных параметров
+            VALIDATION_ERROR = 6;
+        }
+    }
+}
+
+message Restore {
+    // Восстанавливаемый образ
+    Image image = 1;
+
+    // Статус восстановления
+    RestoreStatus restore_status = 2;
+
+    // Идентификатор VPS, для которого запрошено восстановление
+    string vps_id = 3;
+
+    // Имя VPS
+    string vps_name = 4;
+
+    // Дата создания задачи восстановления (RFC3339)
+    string date_create = 5;
+
+    // Дата завершения восстановления (RFC3339), если завершено
+    string date_complete = 6;
+}
+
+enum RestoreStatus {
+    // Ожидает начала восстановления
+    PENDING = 0;
+
+    // Восстановление в процессе
+    PROCESSING = 1;
+
+    // Восстановление завершено успешно
+    COMPLETED = 3;
+}
+
+message Region {
+    // Идентификатор региона
+    string id = 1;
+
+    // Отображаемое имя региона
+    string name = 2;
+
+    // Отображаемое имя региона на английском
+    string name_en = 3;
+
+    // Код страны региона в формате ISO 3166-1 alpha-2
+    string country = 4;
+
+    // Приоритет региона. Меньше значение - выше приоритет
+    uint32 priority = 5;
+}
+
+message Image {
+    // Идентификатор образа
+    string id = 1;
+
+    // Отображаемое имя образа
+    string name = 2;
+
+    // Регион, в котором хранится образ
+    string region = 3;
+
+    // Статус образа
+    ImageStatus status = 4;
+
+    // Дата создания образа (RFC3339)
+    string created_at = 5;
+
+    // Стоимость хранения образа
+    double price = 6;
+
+    // Размер образа в байтах
+    int64 size_bytes = 7;
+
+    // Размер диска в байтах
+    int64 disk_size_bytes = 8;
+}
+
+enum ImageStatus {
+    // Образ успешно создан и готов к использованию
+    CREATED = 0;
+
+    // Образ находится в процессе создания
+    CREATING = 1;
+
+    // Произошла ошибка при создании образа
+    ERROR = 2;
+
+    // Образ находится в процессе конвертации
+    CONVERTING = 3;
+
+    // Образ в процессе миграции между регионами
+    MIGRATING = 4;
+}
+
+message ImageSource {
+    oneof data {
+        // Источник: загрузка по ссылке
+        LinkSource link = 2;
+
+        // Источник: создание образа из VPS
+        VpsSource vps = 3;
+    }
+
+    // Информация о VPS, которая будет использована для создания образа
+    message VpsSource {
+        // Идентификатор VPS
+        string id = 1;
+
+        // Нужно ли остановить VPS перед созданием образа
+        bool stop = 2;
+    }
+
+    // Информация о ссылке, откуда будет загружен образ
+    message LinkSource {
+        // Прямая ссылка на образ
+        string link = 1;
+    }
+}
