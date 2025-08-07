@@ -148,6 +148,9 @@ message CreateImageResponse {
 
             // VPS находится в состоянии разблокировки
             VPS_UNBLOCKING = 5;
+
+            // Доступ к образам заблокирован.
+            SERVICE_DISABLED = 6;
         }
     }
 }
@@ -361,6 +364,9 @@ message RestoreImageResponse {
 
             // Ошибка валидации входных параметров
             VALIDATION_ERROR = 6;
+
+            // Доступ к образам заблокирован.
+            SERVICE_DISABLED = 7;
         }
     }
 }
