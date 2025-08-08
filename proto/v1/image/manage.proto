@@ -278,6 +278,9 @@ message UpdateImageResponse {
 
             // Образ в процессе миграции, обновление невозможно
             IMAGE_MIGRATING = 1;
+
+            // Доступ к образам заблокирован.
+            SERVICE_DISABLED = 7;
         }
     }
 }
