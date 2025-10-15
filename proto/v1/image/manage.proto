@@ -238,11 +238,24 @@ message DownloadLinkInfo {
     string expired_at = 2;
 }
 
-message GetListRequest {}
+message GetListRequest {
+    // Смещение для пагинации
+    uint32 offset = 1;
+
+    // Лимит записей для пагинации (от 1 до 9999)
+    uint32 limit = 2;
+
+    string filter = 3;
+    
+    string sort = 4;
+}
 
 message GetListResponse {
     // Список всех доступных образов
     repeated Image images = 1;
+
+    // Общее количество образов
+    uint32 total_count = 2;
 }
 
 message UpdateImageRequest {
