@@ -249,8 +249,7 @@ message GetListRequest {
     //
     // Формат фильтра описан в разделе "Фильтрация и сортировка" описания API.
     //
-    // Примеры:
-    //   name : "test" AND region = "ru1"
+    // Пример:
     //   name : "test" AND (region = "ru1" OR region = "ru2")
     //
     // Поддерживаемые поля: ["id", "name", "region"].
