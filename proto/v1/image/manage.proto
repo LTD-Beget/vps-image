@@ -14,7 +14,7 @@ service ManageService {
     //
     // Для получения доступных регионов `region`
     // необходимо использовать метод "Получить доступные регионы образов" из API "Образы облачных серверов"
-    rpc createImage(CreateImageRequest) returns (CreateImageResponse) {
+    rpc createImage (CreateImageRequest) returns (CreateImageResponse) {
         option (google.api.http) = {
             post: "/v1/image"
             body: "*"
@@ -27,7 +27,7 @@ service ManageService {
     //
     // Для получения доступных идентификаторов VPS `vps_id` необходимо использовать метод
     // "Получить список VPS" из API "Облачные серверы".
-    rpc getCalculation(GetCalculationRequest) returns (GetCalculationResponse) {
+    rpc getCalculation (GetCalculationRequest) returns (GetCalculationResponse) {
         option (google.api.http) = {
             get: "/v1/image/calculation"
         };
@@ -36,7 +36,7 @@ service ManageService {
     // Получить список образов
     //
     // Возвращает информацию по всем образам на текущем аккаунте.
-    rpc getList(GetListRequest) returns (GetListResponse) {
+    rpc getList (GetListRequest) returns (GetListResponse) {
         option (google.api.http) = {
             get: "/v1/image"
         };
@@ -48,7 +48,7 @@ service ManageService {
     //
     // Для получения доступных идентификаторов образов `id` необходимо использовать метод
     // "Получить список образов" из API "Образы облачных серверов"
-    rpc getDownloadLink(GetDownloadLinkRequest) returns (GetDownloadLinkResponse) {
+    rpc getDownloadLink (GetDownloadLinkRequest) returns (GetDownloadLinkResponse) {
         option (google.api.http) = {
             get: "/v1/image/{id}/link"
         };
@@ -60,7 +60,7 @@ service ManageService {
     //
     // Для получения доступных идентификаторов образов `id` необходимо использовать метод
     // "Получить список образов" из API "Образы облачных серверов"
-    rpc updateImage(UpdateImageRequest) returns (UpdateImageResponse) {
+    rpc updateImage (UpdateImageRequest) returns (UpdateImageResponse) {
         option (google.api.http) = {
             put: "/v1/image/{id}"
             body: "*"
@@ -70,7 +70,7 @@ service ManageService {
     // Получить доступные регионы образов
     //
     // Возвращает список доступных регионов хранения образов
-    rpc getRegionList(GetRegionListRequest) returns (GetRegionListResponse) {
+    rpc getRegionList (GetRegionListRequest) returns (GetRegionListResponse) {
         option (google.api.http) = {
             get: "/v1/image/region"
         };
@@ -82,7 +82,7 @@ service ManageService {
     //
     // Для получения доступных идентификаторов образов `id` необходимо использовать метод
     // "Получить список образов" из API "Образы облачных серверов"
-    rpc deleteImage(DeleteImageRequest) returns (DeleteImageResponse) {
+    rpc deleteImage (DeleteImageRequest) returns (DeleteImageResponse) {
         option (google.api.http) = {
             delete: "/v1/image/{id}"
         };
@@ -95,7 +95,7 @@ service ManageService {
     // Для получения доступных идентификаторов образов `id` и VPS `vps_id`
     // необходимо использовать методы "Получить список образов" и "Получить список VPS"
     // из соответствующих API.
-    rpc restoreImage(RestoreImageRequest) returns (RestoreImageResponse) {
+    rpc restoreImage (RestoreImageRequest) returns (RestoreImageResponse) {
         option (google.api.http) = {
             post: "/v1/image/{id}/restore"
             body: "*"
@@ -262,15 +262,13 @@ message GetListRequest {
     // Пример:
     //   name : "test" AND (region = "ru1" OR region = "ru2")
     //
-    // Поддерживаемые операторы: `AND`, `OR`.
-    // Поддерживаемые поля: `id`, `name`, `region`.
+    // Поддерживаемые операторы: ["AND", "OR"].
+    // Поддерживаемые поля: ["id", "name", "region"].
     string filter = 3;
 
     // Сортировка списка образов
     //
     // Определяет поле и направление сортировки в формате "<поле> <направление>".
-    //
-    // Поддерживаемые поля: created_at
     //
     // Направление сортировки:
     //   asc — по возрастанию (по умолчанию)
@@ -281,6 +279,8 @@ message GetListRequest {
     //   created_at asc
     //
     // Если параметр не указан, используется сортировка по умолчанию: id asc
+    //
+    // Поддерживаемые поля: ["created_at"]
     string sort = 4;
 }
 
