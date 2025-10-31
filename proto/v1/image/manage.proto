@@ -265,8 +265,6 @@ message GetListRequest {
     uint32 limit = 2;
 
     // Фильтр для выборки образов
-    //
-
     string filter = 3;
 
     // Сортировка списка образов
