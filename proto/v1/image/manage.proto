@@ -54,7 +54,7 @@ service ManageService {
     //   `created_at desc`
     //   `created_at asc`
     //
-    // **Поддерживаемые поля для сортировки:** [`created_at`]
+    // **Поддерживаемые поля для сортировки:** `created_at`
     rpc getList (GetListRequest) returns (GetListResponse) {
         option (google.api.http) = {
             get: "/v1/image"
