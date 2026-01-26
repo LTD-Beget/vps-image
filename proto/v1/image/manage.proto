@@ -144,6 +144,12 @@ message CreateImageResponse {
         // Сообщение об ошибке
         string message = 2;
 
+        // Расширенное описание ошибки
+        oneof extra {
+            // Расширенное описание ошибки: регион VPS не совпадает с регионом образа (REGION_MISMATCH)
+            RegionMismatchError region_mismatch_error = 3;
+        }
+
         enum Code {
             // Внутренняя ошибка
             INTERNAL_ERROR = 0;
@@ -165,6 +171,14 @@ message CreateImageResponse {
 
             // Доступ к образам заблокирован.
             SERVICE_DISABLED = 6;
+        }
+
+        message RegionMismatchError {
+            // Фактический регион VPS
+            string vps_region = 1;
+
+            // Запрошенный регион
+            string requested_region = 2;
         }
     }
 }
