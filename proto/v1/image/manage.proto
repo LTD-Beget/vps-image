@@ -179,7 +179,7 @@ message CreateImageResponse {
           REGION_NOT_FOUND = 8;
 
           // Ошибка валидации.
-          IMAGE_VALIDATION_ERROR = 9;
+          VALIDATION_ERROR = 9;
         }
 
         message RegionMismatchError {
