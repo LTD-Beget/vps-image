@@ -171,6 +171,15 @@ message CreateImageResponse {
 
             // Доступ к образам заблокирован.
             SERVICE_DISABLED = 6;
+
+          // Некорректный URL.
+          INVALID_URL = 7;
+
+          // Регион не найден.
+          REGION_NOT_FOUND = 8;
+
+          // Ошибка валидации.
+          VALIDATION_ERROR = 9;
         }
 
         message RegionMismatchError {
@@ -324,6 +333,9 @@ message UpdateImageResponse {
 
             // Доступ к образам заблокирован.
             SERVICE_DISABLED = 7;
+
+            // Ошибка валидации.
+            VALIDATION_ERROR = 8;
         }
     }
 }
@@ -360,6 +372,9 @@ message DeleteImageResponse {
         enum Code {
             // Внутренняя ошибка
             INTERNAL_ERROR = 0;
+
+            // Образ используется для восстановления VPS.
+            IMAGE_RESTORING = 1;
         }
     }
 }
