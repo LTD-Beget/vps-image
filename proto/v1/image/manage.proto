@@ -232,8 +232,26 @@ message GetCalculationResponse {
 }
 
 message PriceCalculationInfo {
-    // Расчетная стоимость хранения образа
+    // Расчетная стоимость хранения образа в месяц (deprecated, заменено полем price_month)
     double price = 1;
+
+    // Расчетная стоимость хранения образа в час
+    double price_hour = 2;
+    // Расчетная стоимость хранения образа в час за 1 ГБ
+    double price_hour_gb = 3;
+
+    // Расчетная стоимость хранения образа в день
+    double price_day = 4;
+    // Расчетная стоимость хранения образа в день за 1 ГБ
+    double price_day_gb = 5;
+
+    // Расчетная стоимость хранения образа в месяц
+    double price_month = 6;
+    // Расчетная стоимость хранения образа в месяц за 1 ГБ
+    double price_month_gb = 7;
+
+    // Расчетный размер образа в байтах
+    int64 size_bytes = 8;
 }
 
 message GetDownloadLinkRequest {
@@ -496,8 +514,17 @@ message Image {
     // Дата создания образа (RFC3339)
     string created_at = 5;
 
-    // Стоимость хранения образа
+    // Стоимость хранения образа в день (deprecated, заменено полем price_day)
     double price = 6;
+
+    // Стоимость хранения образа в час
+    double price_hour = 9;
+
+    // Стоимость хранения образа в день
+    double price_day = 10;
+
+    // Стоимость хранения образа в месяц
+    double price_month = 11;
 
     // Размер образа в байтах
     int64 size_bytes = 7;
